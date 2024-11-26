@@ -13,17 +13,25 @@
     {% include "./common/nav.html" ignore missing with context %}
 
     <div class="container">
-        <div class="row">
+        < <div class="row">
             <div class="col-2">
                 <h5>Categories</h5>
-                <!-- https://getbootstrap.com/docs/5.3/components/list-group/#links-and-buttons -->
                 <div class="list-group">
                     {% for category in categories %}
-                        <a href="#" class="list-group-item list-group-item-action">{{ category.name }}</a>
+                        <a href="#" 
+                           class="list-group-item list-group-item-action"
+                           hx-get="/product/filter/{{ category.id }}" 
+                           hx-target="#productList"                   
+                           hx-swap="innerHTML">                       
+                            {{ category.name }}
+                        </a>
                     {% endfor %}
-                    </div>
+                </div>
 
             </div>
+
+
+            
             <div class="col-10">
                 <h5>Products</h5>
                 <!--
@@ -52,10 +60,19 @@
                 <form class="ms-2 me-auto" hx-post="/product/" hx-target="#productList" hx-swap="beforeend">
                     <fieldset>
                         <legend>Add a new product</legend>
-                        <div class="mb-3">
+                        <!-- <div class="mb-3">
                             <label for="category_id" class="form-label">Category</label>
                             <input type="text" class="form-control" id="category_id" name="category_id" required>
+                        </div> -->
+                        <div class="mb-3">
+                            <label for="category_id" class="form-label">Category</label>
+                            <select id="category_id" name="category_id" class="form-select" required>
+                                {% for category in categories %}
+                                    <option value="{{ category.id }}">{{ category.name }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
+
                         <div class="mb-3">
                             <label for="title" class="form-label">Title</label>
                             <input type="text" class="form-control" id="title" name="title" required>

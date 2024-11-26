@@ -4,8 +4,7 @@ import json
 
 # get list of products from data
 def getAllProducts() :
-    products = dataGetProducts()
-    return products
+    return dataGetProducts()
 
 def getProduct(id) :
     return dataGetProduct(id)
@@ -29,3 +28,8 @@ def updateProduct(input: Product) :
 
 def deleteProduct(id : int) :
     result = dataDeleteProduct(id)
+
+
+def getProductsByCategory(category_id: int):
+    return dataGetProductsByCategory(category_id)
+

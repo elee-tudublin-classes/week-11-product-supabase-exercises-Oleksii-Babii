@@ -38,15 +38,32 @@ def putProduct(request: Request, productData: Annotated[Product, Form()]) :
     update_product = updateProduct(productData)
     return templates.TemplateResponse("product/partials/product_tr.html", {"request": request, "product": update_product})
 
-@router.post("/")
-def postProduct(request: Request, productData: Annotated[Product, Form()]) :
-    # get item value from the form POST data
-    new_product = newProduct(productData)
-    return templates.TemplateResponse("product/partials/product_tr.html", {"request": request, "product": new_product})
 
-# https://fastapi.tiangolo.com/tutorial/request-form-models/#pydantic-models-for-forms
+@router.post("/")
+def postProduct(
+    request: Request,
+    productData: Annotated[Product, Form()]
+):
+    # Call the service to add the new product
+    new_product = newProduct(productData)
+    
+    # Render the new product row in the template
+    return templates.TemplateResponse(
+        "product/partials/product_tr.html", 
+        {"request": request, "product": new_product}
+    )
 
 @router.delete("/{id}")
 def delProduct(request: Request, id: int):
     deleteProduct(id)
     return templates.TemplateResponse("product/partials/product_list.html", {"request": request, "products": getAllProducts()})
+
+
+@router.get("/filter/{category_id}", response_class=HTMLResponse)
+async def filterProducts(request: Request, category_id: int):
+    # Fetch products by category
+    filtered_products = getProductsByCategory(category_id)
+    return templates.TemplateResponse(
+        "product/partials/product_list.html",
+        {"request": request, "products": filtered_products}
+    )
